@@ -79,7 +79,7 @@ def log_success(ip, user_agent, geo_info):
 @app.route('/verify', methods=['POST'])
 def verify():
     captcha_response = request.form['g-recaptcha-response']
-    secret_key = "VOTRE_SECRET_KEY"  # Remplacez par votre clé secrète reCAPTCHA
+    secret_key = "6LcRMhYrAAAAAAkk400Ie-3_QuAYYfYbkd6kcGwM"  # Remplacez par votre clé secrète reCAPTCHA
     payload = {'response': captcha_response, 'secret': secret_key}
     r = requests.post("https://www.google.com/recaptcha/api/siteverify", data=payload)
     result = r.json()
