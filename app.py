@@ -55,7 +55,7 @@ def reward():
     user_agent = request.headers.get('User-Agent')
     geo_info = requests.get(f'http://ipinfo.io/{user_ip}/json').json()
     log_success(user_ip, user_agent, geo_info)
-    return "Félicitations ! Vous avez remporté le flag."
+    return "Félicitations {user_ip} you are connected from {country}! Vous avez remporté le flag."
 
 def log_success(ip, user_agent, geo_info):
     # Enregistrez le succès du challenge
