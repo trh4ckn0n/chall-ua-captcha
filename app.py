@@ -2,11 +2,24 @@ import sqlite3
 import requests
 from flask import Flask, request, render_template, redirect, url_for
 import os
+from functools import wraps
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
 # Liste des pays autorisés
 allowed_countries = ['IL', 'BY', 'MD', 'RU']  # Israël, Biélorussie, Moldavie, Russie
+
+# Décorateur de protection admin
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        pwd = request.args.get('pwd')
+        if pwd != os.getenv("ADMIN_PASSWORD"):
+            return "Accès refusé. Mot de passe requis.", 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/')
 def home():
@@ -52,6 +65,7 @@ def log_access(ip, user_agent, geo_info):
     conn.close()
 
 @app.route('/admin/logs')
+@admin_required
 def view_logs():
     conn = sqlite3.connect('access_log.db')
     c = conn.cursor()
@@ -61,6 +75,7 @@ def view_logs():
     return render_template("logs.html", logs=logs)
 
 @app.route('/admin/success')
+@admin_required
 def view_success():
     conn = sqlite3.connect('success_log.db')
     c = conn.cursor()
