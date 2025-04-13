@@ -23,6 +23,10 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/enonce')
+def show_enonce():
+    return render_template("enonce.html")
+
 @app.route('/')
 def home():
     user_agent = request.headers.get('User-Agent', '').lower()
