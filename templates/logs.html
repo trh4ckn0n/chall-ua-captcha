@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logs des Accès</title>
+    <style>
+        body { background: #111; color: #0f0; font-family: monospace; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { border: 1px solid #0f0; padding: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Derniers Logs</h1>
+    <table>
+        <tr><th>ID</th><th>IP</th><th>User-Agent</th><th>Pays</th><th>Ville</th><th>Loc</th><th>Timestamp</th></tr>
+        {% for log in logs %}
+        <tr>
+            {% for field in log %}
+            <td>{{ field }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
