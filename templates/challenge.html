@@ -15,39 +15,37 @@
         <button type="submit">Soumettre</button>
     </form>
 
-    <script>
-        document.getElementById('executePayload').onclick = function() {
-            // Payload JS avancé
-            const secretKey = 'trhacknonflag';
-            const challengeSteps = [
-                function() { return prompt('Entrez le mot de passe : '); },
-                function() { return confirm('Êtes-vous sûr ?'); },
-                function() { return Math.random() > 0.5; } // Déclenche une condition aléatoire
-            ];
+<script>
+    document.getElementById('executePayload').onclick = function() {
+        const expectedAnswers = ['hacktiviste', 'hacktivist'];
+        const challengeSteps = [
+            function() {
+                const answer = prompt("Énigme : Comment s'appelle un hacker utilisant ses compétences dans la lutte sociale ?");
+                return answer && expectedAnswers.includes(answer.trim().toLowerCase());
+            },
+            function() { return confirm('Êtes-vous sûr de votre réponse ?'); },
+            function() { return Math.random() > 0.5; }
+        ];
 
-            let stepIndex = 0;
+        let stepIndex = 0;
 
-            function executeStep() {
-                if (stepIndex < challengeSteps.length) {
-                    if (!challengeSteps[stepIndex]()) {
-                        alert('Échec de l\'étape ' + (stepIndex + 1));
-                        return;
-                    }
-                    stepIndex++;
-                    executeStep();
-                } else {
-                    if (prompt('Veuillez entrer le mot de passe final : ') === secretKey) {
-                        alert('Bravo ! Vous avez réussi le challenge.');
-                        document.location.href = '/reward';  // Redirection vers la récompense
-                    } else {
-                        alert('Mot de passe incorrect. Réessayez.');
-                    }
+        function executeStep() {
+            if (stepIndex < challengeSteps.length) {
+                if (!challengeSteps[stepIndex]()) {
+                    alert('Échec de l\'étape ' + (stepIndex + 1));
+                    return;
                 }
+                stepIndex++;
+                executeStep();
+            } else {
+                alert('Bravo ! Vous avez réussi le challenge.');
+                document.location.href = '/reward';
             }
+        }
 
-            executeStep();
-        };
-    </script>
+        executeStep();
+    };
+</script>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
