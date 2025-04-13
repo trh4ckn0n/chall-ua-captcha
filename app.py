@@ -1,6 +1,7 @@
 import sqlite3
 import requests
 from flask import Flask, request, render_template, redirect, url_for
+import os
 
 app = Flask(__name__)
 
@@ -9,28 +10,29 @@ allowed_countries = ['IL', 'BY', 'MD', 'RU']  # Israël, Biélorussie, Moldavie,
 
 @app.route('/')
 def home():
-    user_agent = request.headers.get('User-Agent')
-    user_ip = request.remote_addr  # récupère l'IP de l'utilisateur
+    user_agent = request.headers.get('User-Agent', '').lower()
+    user_ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
 
     # Vérification du User-Agent personnalisé
-    if user_agent != 'trhacknontryer':
+    if 'trhacknontryer' not in user_agent:
         return "Veuillez utiliser un User-Agent valide pour participer au challenge.", 400
 
-    # GeoIP - exemple avec une API publique (ipinfo.io)
-    geo_info = requests.get(f'http://ipinfo.io/{user_ip}/json').json()
-    country = geo_info.get('country')
+    # GeoIP
+    geo_info = requests.get(f'https://ipinfo.io/{user_ip}/json').json()
+    country = geo_info.get('country', '')
 
-    # Restriction géographique (Israël, Biélorussie, Moldavie, Russie)
+    print(f"[DEBUG] IP: {user_ip}, Country: {country}, UA: {user_agent}")
+
+    # Restriction géographique
     if country not in allowed_countries:
         return "Accès interdit à partir de votre pays.", 403
 
-    # Stocker les logs (IP, User-Agent, Heure, Géolocalisation)
+    # Stocker les logs
     log_access(user_ip, user_agent, geo_info)
 
     return render_template("challenge.html")
 
 def log_access(ip, user_agent, geo_info):
-    # Enregistrez les informations dans un fichier log ou une base de données
     conn = sqlite3.connect('access_log.db')
     c = conn.cursor()
     c.execute('''
@@ -51,14 +53,13 @@ def log_access(ip, user_agent, geo_info):
 
 @app.route('/reward')
 def reward():
-    user_ip = request.remote_addr
-    user_agent = request.headers.get('User-Agent')
-    geo_info = requests.get(f'http://ipinfo.io/{user_ip}/json').json()
+    user_ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+    user_agent = request.headers.get('User-Agent', '').lower()
+    geo_info = requests.get(f'https://ipinfo.io/{user_ip}/json').json()
     log_success(user_ip, user_agent, geo_info)
-    return "Félicitations {user_ip} you are connected from {country}! Vous avez remporté le flag."
+    return f"Félicitations {user_ip} you are connected from {geo_info.get('country')}! Vous avez remporté le flag."
 
 def log_success(ip, user_agent, geo_info):
-    # Enregistrez le succès du challenge
     conn = sqlite3.connect('success_log.db')
     c = conn.cursor()
     c.execute('''
@@ -79,7 +80,7 @@ def log_success(ip, user_agent, geo_info):
 @app.route('/verify', methods=['POST'])
 def verify():
     captcha_response = request.form['g-recaptcha-response']
-    secret_key = "6LcRMhYrAAAAAAkk400Ie-3_QuAYYfYbkd6kcGwM"  # Remplacez par votre clé secrète reCAPTCHA
+    secret_key = os.getenv("RECAPTCHA_SECRET_KEY", "6LcRMhYrAAAAAAkk400Ie-3_QuAYYfYbkd6kcGwM")
     payload = {'response': captcha_response, 'secret': secret_key}
     r = requests.post("https://www.google.com/recaptcha/api/siteverify", data=payload)
     result = r.json()
