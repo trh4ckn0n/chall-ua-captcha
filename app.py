@@ -60,6 +60,15 @@ def view_logs():
     conn.close()
     return render_template("logs.html", logs=logs)
 
+@app.route('/admin/success')
+def view_success():
+    conn = sqlite3.connect('success_log.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM success_log ORDER BY timestamp DESC LIMIT 100")
+    logs = c.fetchall()
+    conn.close()
+    return render_template("success.html", logs=logs)
+
 @app.route('/reward')
 def reward():
     user_ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
