@@ -51,6 +51,15 @@ def log_access(ip, user_agent, geo_info):
     conn.commit()
     conn.close()
 
+@app.route('/admin/logs')
+def view_logs():
+    conn = sqlite3.connect('access_log.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM access_log ORDER BY timestamp DESC LIMIT 100")
+    logs = c.fetchall()
+    conn.close()
+    return render_template("logs.html", logs=logs)
+
 @app.route('/reward')
 def reward():
     user_ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
