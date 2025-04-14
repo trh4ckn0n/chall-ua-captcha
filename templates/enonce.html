@@ -12,6 +12,7 @@
         }
         h1, h2 {
             color: #00ffff;
+            text-shadow: 0 0 5px #00ffff55;
         }
         .container {
             max-width: 900px;
@@ -20,6 +21,7 @@
             padding: 20px;
             border-radius: 10px;
             background-color: #1a1a1a;
+            box-shadow: 0 0 20px #39ff1455;
         }
         .difficulty {
             background-color: #222;
@@ -28,12 +30,55 @@
             margin-bottom: 20px;
             color: #ff00ff;
             font-weight: bold;
+            text-align: center;
         }
         a {
             color: #ff00ff;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px #ff00ff;
         }
         code {
             color: #00ffff;
+        }
+        .hacker-box {
+            background-color: #121212;
+            border: 1px dashed #ff00ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            box-shadow: 0 0 10px #00ffff55;
+            animation: pulse 3s infinite alternate;
+        }
+        .glow {
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px #00ffccaa;
+        }
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #ff00ff;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 5px #00ffcc33; }
+            to { box-shadow: 0 0 20px #ff00ff66; }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ff00ff; }
         }
     </style>
 </head>
@@ -45,7 +90,7 @@
         <p>
             trhacknontryer te souhaite la Bienvenue challenger, tu es sur le point de tester tes compétences sur un challenge concocté par <strong>trhacknon</strong>.
             Tu n’as pas accès à tout… du moins, pas de façon classique.
-            l'agent obligatoire est cité tres tres pres de ces mots.
+            l'agent obligatoire est cité très très près de ces mots.
         </p>
 
         <h2>Contexte :</h2>
@@ -61,15 +106,27 @@
         <h2>Conseils :</h2>
         <ul>
             <li>Ton origine peut jouer contre toi… ou te sauver.</li>
-            <li>L'origine acceptée sont surement des pays ayant declenché des guerres recemment.</li>
+            <li>L'origine acceptée sont sûrement des pays ayant déclenché des guerres récemment.</li>
             <li>Le serveur a des goûts très précis. Il n’écoute que ceux qui se présentent avec une certaine signature.</li>
             <li>Indice : le nom du créateur + l'attitude d’un testeur pourrait t’ouvrir des portes.</li>
             <li>Il y a des yeux partout. Avance discrètement.</li>
         </ul>
 
-        <p>
-            Tu penses pouvoir contourner les protections ? Alors à toi de jouer.
-        </p>
+        <div class="hacker-box">
+            <p class="glow typewriter">Et wai igo, catch me if you can !</p>
+            <p style="color:#aaaaaa;">
+                Ici, seuls les initiés comprennent les vraies règles. Si tu veux passer, faudra plus qu’un <code>curl</code> timide…
+                <span style="color:#39ff14;">Spoof ton User-Agent</span>,
+                choisis une <span style="color:#ffcc00;">patrie belliqueuse</span> en guise d’IP,
+                et fracasse ce captcha comme un pro.
+            </p>
+            <p style="color:#ff4444;">
+                Les logs tournent, les filtres sont affûtés. Le lab t’observe. <span style="color:#00ffff;">Tu n’es pas invisible.</span>
+            </p>
+            <p style="color:#ff00ff; font-style:italic;">
+                Si tu passes... on se croisera peut-être dans <code>/root/challenge/shell.sh</code>
+            </p>
+        </div>
 
         <p><a href="/">Retour au challenge</a></p>
     </div>
