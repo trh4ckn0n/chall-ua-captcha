@@ -65,20 +65,36 @@
             margin: 0 auto;
             animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
         }
-
         @keyframes pulse {
             from { box-shadow: 0 0 5px #00ffcc33; }
             to { box-shadow: 0 0 20px #ff00ff66; }
         }
-
         @keyframes typing {
             from { width: 0 }
             to { width: 100% }
         }
-
         @keyframes blink-caret {
             from, to { border-color: transparent }
             50% { border-color: #ff00ff; }
+        }
+        .screenshots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .screenshot-box {
+            background-color: #000;
+            border: 2px solid #ff00ff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ff00ff88;
+            max-width: 300px;
+        }
+        .screenshot-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -115,7 +131,8 @@
         <p>
             Tu penses pouvoir contourner les protections ? Alors à toi de jouer.
         </p>
-    <div class="hacker-box">
+
+        <div class="hacker-box">
             <p class="glow typewriter">Et wai igo, catch me if you can !</p>
             <p style="color:#aaaaaa;">
                 Ici, seuls les initiés comprennent les vraies règles. Si tu veux passer, faudra plus qu’un <code>curl</code> timide…
@@ -130,6 +147,17 @@
                 Si tu passes... on se croisera peut-être dans <code>/root/challenge/shell.sh</code>
             </p>
         </div>
+
+        {% if screenshots %}
+            <h2>Captures d'écran du challenge :</h2>
+            <div class="screenshots">
+                {% for image in screenshots %}
+                    <div class="screenshot-box">
+                        <img src="{{ url_for('static', filename='screenshots/' ~ image) }}" alt="screenshot">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <p><a href="/">Retour au challenge</a></p>
     </div>
