@@ -158,7 +158,17 @@
                 {% endfor %}
             </div>
         {% endif %}
-
+<h2>Uploader un fichier (non sécurisé)</h2>
+<form action="/upload_screenshot" method="POST" enctype="multipart/form-data" style="margin-top: 20px;">
+    <div style="background-color:#121212; border:1px dashed #ff00ff; padding:15px; border-radius:8px; box-shadow:0 0 10px #ff00ff55;">
+        <label for="file" style="color:#00ffff;">Choisir un fichier à envoyer :</label><br><br>
+        <input type="file" name="screenshot" id="file" style="color:#ff00ff; background:#0d0d0d; border:1px solid #ff00ff; padding:6px;"><br><br>
+        <button type="submit" style="background-color:#39ff14; color:#000; font-weight:bold; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">
+            Upload
+        </button>
+    </div>
+</form>
+        
         <p><a href="/">Retour au challenge</a></p>
     </div>
 </body>
